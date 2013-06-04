@@ -12,9 +12,7 @@ function gridelementGdataAlbumCtrl($scope, cmsApi, $routeParams) {
 
 	api.getAlbumPhotos($scope.gdataAlbumId).then(function (data) {
 		$scope.firstPhoto = data.splice(0, 1)[0];
-		console.log($scope.firstPhoto)
 		$scope.gdataAlbumPhotos = data;
-
 		console.log($scope.gdataAlbumId, data)
 	});
 

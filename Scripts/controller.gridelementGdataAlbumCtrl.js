@@ -1,7 +1,6 @@
 function gridelementGdataAlbumCtrl($scope, cmsApi, $routeParams) {
 	var api = new ApiWrapper(cmsApi);
 
-
 	$scope.gdataAlbumId = getAlbumId();
 	$scope.gdataAlbumPhotos = getAlbumId();
 

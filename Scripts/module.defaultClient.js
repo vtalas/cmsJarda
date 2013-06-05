@@ -7,6 +7,7 @@ module.factory('cache', ['$cacheFactory', function ($cacheFactory) {
 module.config(['$routeProvider', '$provide', function ($routeProvider) {
 	$routeProvider
 		.when('/page/:link', {controller: pageController, templateUrl: 'template.page.html'})
+		.when('/g/:galleryId/:imageIndex', {controller: galleryImageController, templateUrl: 'galleryImage.html'})
 		.when('/home', {controller: homeController, templateUrl: 'template.home.html'})
 		.when('/login', {controller: loginController, templateUrl: 'template.login.html'})
 		.otherwise({redirectTo: '/home'});
@@ -31,6 +32,7 @@ module.directive("gridelement", function ($compile, $templateCache	) {
 
 module.directive("ngcGdataAlbum", ngcGdataAlbumDirective);
 module.directive("ngcLazyImage", ngcLazyImage);
+module.directive("ngcResponsiveImage", ngcResponsiveImage);
 
 
 

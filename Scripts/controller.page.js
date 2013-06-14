@@ -7,6 +7,10 @@ function pageController($scope, cmsApi, $routeParams) {
 		$scope.page = data;
 	});
 
+	$routeParams.aaa = "asdlaskndklas"
+
+	//location.hash = location.hash + "key=asdkbjasdkjasbd"
+
 	$scope.$on("set-message", function(e, message) {
 	    $scope.message = message;
 	});

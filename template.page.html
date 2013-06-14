@@ -117,7 +117,7 @@
 			</div>
 			<div class="grid_9 xxx">
 				<div ng-repeat="photo in gdataAlbumPhotos" class="image-small">
-					<a href="#/g/{{gdataAlbumId}}/{{$index}}"> <img ngc-lazy-image="photo.Thumbnails[0].PhotoUri"/></a>
+					<a href="#/page/{{route.link}}/{{gdataAlbumId}}/{{$index}}"> <img ngc-lazy-image="photo.Thumbnails[0].PhotoUri"/></a>
 				</div>
 			</div>
 		</div>

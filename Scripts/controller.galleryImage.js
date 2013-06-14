@@ -1,25 +1,24 @@
 /*global MaspartiData, ApiWrapper*/
-function galleryImageController($scope, cmsApi, $routeParams) {
+function galleryImageController($scope, $routeParams, api) {
 	var galleryId = $routeParams.galleryId,
-		imageIndex = $routeParams.imageIndex,
-		api = new ApiWrapper(cmsApi);
+		imageIndex = $routeParams.imageIndex;
 
-//	maspartiData.galleryWithInfo(galleryId).done(function (data) {
-//		$scope.gallery = data;
-//		$scope.image = data.images[imageIndex];
-//		$scope.ready = true;
-//	});
+	$scope.route = {
+		link: $routeParams.link,
+		galleryId: $routeParams.galleryId,
+		imageIndex: $routeParams.imageIndex
+	};
+	$scope.referrer = "#/page/" + $scope.route.link + "/";
 
+	api.getAlbumPhotos(galleryId).then(function (data) {
+		var copy = data.slice();
+		$scope.firstPhoto = copy.splice(0, 1)[0];
+		$scope.gdataAlbumPhotos = copy;
 
-	api.getAlbumPhotos($scope.gdataAlbumId).then(function (data) {
-		$scope.firstPhoto = data.splice(0, 1)[0];
-		$scope.gdataAlbumPhotos = data;
-		console.log($scope.gdataAlbumId, data)
-
-		$scope.gallery = data;
-		$scope.image = data[imageIndex];
+		$scope.gallery = copy;
+		$scope.image = copy[imageIndex];
 		$scope.ready = true;
-
+		console.log(galleryId, copy, $scope.image.FullSize.PhotoUri)
 	});
 
 	$scope.imageUrl = function () {
@@ -31,29 +30,29 @@ function galleryImageController($scope, cmsApi, $routeParams) {
 	};
 
 	$scope.close = function () {
-		location.hash = "#/g/" + galleryId;
+		location.hash = $scope.referrer;
 	};
 
 	$scope.next = function () {
-		var length = $scope.gallery.images.length;
+		var length = $scope.gallery.length;
 
 		imageIndex++;
 		if (imageIndex >= length) {
 			imageIndex = 0;
 		}
 
-		location.hash = "#/g/" + galleryId + "/" + imageIndex;
+		location.hash =	$scope.referrer + galleryId + "/" + imageIndex;
 	};
 
 	$scope.prev = function () {
-		var length = $scope.gallery.images.length;
+		var length = $scope.gallery.length;
 
 		imageIndex--;
 		if (imageIndex <= 0) {
 			imageIndex = length - 1;
 		}
 
-		location.hash = "#/g/" + galleryId + "/" + imageIndex;
+		location.hash =	$scope.referrer + galleryId + "/" + imageIndex;
 	};
 }
 

@@ -1,13 +1,17 @@
 var module = angular.module("defaultClient", ["apiModule"]);
 
 module.factory('cache', ['$cacheFactory', function ($cacheFactory) {
-	return $cacheFactory("masparti");
+	return $cacheFactory("jarda");
+}]);
+
+module.factory("test", ['cmsApi' ,'cache', function (cmsApi, cache) {
+	return new ApiWrapper(cmsApi, cache);
 }]);
 
 module.config(['$routeProvider', '$provide', function ($routeProvider) {
 	$routeProvider
 		.when('/page/:link', {controller: pageController, templateUrl: 'template.page.html'})
-		.when('/g/:galleryId/:imageIndex', {controller: galleryImageController, templateUrl: 'galleryImage.html'})
+		.when('/page/:link/:galleryId/:imageIndex', {controller: galleryImageController, templateUrl: 'galleryImage.html', resolve: {api: "test"}})
 		.when('/home', {controller: homeController, templateUrl: 'template.home.html'})
 		.when('/login', {controller: loginController, templateUrl: 'template.login.html'})
 		.otherwise({redirectTo: '/home'});

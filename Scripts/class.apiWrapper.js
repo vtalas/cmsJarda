@@ -4,7 +4,6 @@ var ApiWrapper = (function () {
 	function ApiWrapper(cmsApiImpl, cache) {
 		this.cmsApi = cmsApiImpl;
 		this.cache = cache;
-		//this.converter = new RawDataConverter();
 	}
 
 	ApiWrapper.prototype.getPage = function (link) {
@@ -43,11 +42,21 @@ var ApiWrapper = (function () {
 		return deferred;
 	};
 	ApiWrapper.prototype.getAlbumPhotos = function (albumId) {
-		var deferred = $.Deferred();
+		var deferred = $.Deferred(),
+			key = albumId + "getAlbumPhotos",
+			response = this.cache.get(key),
+			self = this;
+
+		if (response) {
+			deferred.resolve(response);
+			return deferred;
+		}
 
 		this.cmsApi.getAlbumPhotos({id: albumId }, function (data) {
+			self.cache.put(key, data);
 			deferred.resolve(data);
 		});
+
 		return deferred;
 	};
 	ApiWrapper.prototype.getAlbums = function () {

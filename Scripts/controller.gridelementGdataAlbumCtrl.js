@@ -1,5 +1,5 @@
-function gridelementGdataAlbumCtrl($scope, cmsApi, $routeParams) {
-	var api = new ApiWrapper(cmsApi);
+function gridelementGdataAlbumCtrl($scope, cmsApi, $routeParams, cache) {
+	var api = new ApiWrapper(cmsApi, cache);
 
 	$scope.gdataAlbumId = getAlbumId();
 	$scope.route = {

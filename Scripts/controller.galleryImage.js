@@ -1,25 +1,14 @@
 /*global MaspartiData, ApiWrapper*/
-function galleryImageController($scope, $routeParams, api) {
-	var galleryId = $routeParams.galleryId,
-		imageIndex = $routeParams.imageIndex;
+function galleryImageController($scope, $routeParams, test, $location) {
 
-	$scope.route = {
-		link: $routeParams.link,
-		galleryId: $routeParams.galleryId,
-		imageIndex: $routeParams.imageIndex
-	};
-	$scope.referrer = "#/page/" + $scope.route.link + "/";
-
-	api.getAlbumPhotos(galleryId).then(function (data) {
-		var copy = data.slice();
-		$scope.firstPhoto = copy.splice(0, 1)[0];
-		$scope.gdataAlbumPhotos = copy;
-
-		$scope.gallery = copy;
-		$scope.image = copy[imageIndex];
-		$scope.ready = true;
-		console.log(galleryId, copy, $scope.image.FullSize.PhotoUri)
+	$scope.$on("getAlbumPhotosSuccessx", function (e, data) {
+		console.log("galleryImageController")
+		$scope.gallery = data;
 	});
+
+	var getImageIndex = function () {
+		return $routeParams.i;
+	};
 
 	$scope.imageUrl = function () {
 		var x = "";
@@ -30,31 +19,48 @@ function galleryImageController($scope, $routeParams, api) {
 	};
 
 	$scope.close = function () {
-		location.hash = $scope.referrer;
+		console.log("xx")
+		location.hash = $location.path();
 	};
 
 	$scope.next = function () {
-		var length = $scope.gallery.length;
+		var length = $scope.gallery.length,
+			imageIndex = getImageIndex();
 
 		imageIndex++;
 		if (imageIndex >= length) {
 			imageIndex = 0;
 		}
 
-		location.hash =	$scope.referrer + galleryId + "/" + imageIndex;
+		$scope.image = $scope.gallery[imageIndex];
+		$location.search("i", imageIndex);
 	};
 
 	$scope.prev = function () {
-		var length = $scope.gallery.length;
+		var length = $scope.gallery.length,
+			imageIndex = getImageIndex();
 
 		imageIndex--;
 		if (imageIndex <= 0) {
 			imageIndex = length - 1;
 		}
-
-		location.hash =	$scope.referrer + galleryId + "/" + imageIndex;
+		$scope.image = $scope.gallery[imageIndex];
+		$location.search("i", imageIndex);
 	};
+
+	$scope.$on("global-keydown", function (e, $event) {
+		var key = $event.keyCode;
+
+		switch (key){
+			case 27 : $scope.close();
+				break;
+		}
+	});
+
+
 }
+
+
 
 
 

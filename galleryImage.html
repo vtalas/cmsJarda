@@ -32,19 +32,22 @@
 
 </style>
 
-<div class="dumbBoxWrap">
+<div class="dumbBoxWrap" ng-controller="galleryImageController">
+
+
 	<div class="dumbBoxOverlay">
 		&nbsp;
 	</div>
 
-	<div class="vertical-offset">
+	<div class="vertical-offset"  >
 		<div>
-			<button ng-click="prev()">prev</button>
+			<button ng-click="prev()">prev..{{keyCode}}..</button>
 			<button ng-click="next()">next</button>
-			<button ng-click="close()">close</button>
+			<button ng-click="close()" >close</button>
 		</div>
-		<ngc-responsive-img gallery-image="image" >
 
+		<ngc-responsive-img gallery-image="image" >
+		<img src="{{image.FullSize.PhotoUri}}" />
 	</div>
 </div>
 

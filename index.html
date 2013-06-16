@@ -7,8 +7,10 @@
 	<title>Default PHP Client</title>
 
 	<script type="text/javascript" src="Scripts/libs/jquery.min.js"></script>
-	<script type="text/javascript" src="Scripts/libs/angular.min.js"></script>
+	<script type="text/javascript" src="Scripts/libs/angular.js"></script>
 	<script type="text/javascript" src="Scripts/libs/angular-resource.min.js"></script>
+	<script type="text/javascript" src="Scripts/libs/angular-ui/event.js"></script>
+	<script type="text/javascript" src="Scripts/libs/angular.keypress.js"></script>
 
 	<script type="text/javascript" src="Scripts/class.apiWrapper.js"></script>
 
@@ -35,9 +37,11 @@
 
 </head>
 <body>
+<div class="container_12" ng-controller="appController">
+	<i ui-event="{ keydown: 'globalKeydown($event)'}"></i>
 
-<div class="container_12">
 	<div class="btn-group">
+
 		<a class="btn" href="#/home"></i>home</a>
 		<a class="btn" href="#/login">login</a>
 		<a class="btn" href="Service/logout.php">logout</a>
@@ -51,7 +55,6 @@
 	<div ng-view></div>
 
 </div>
-
 
 </body>
 <script type="text/javascript" src="Scripts/libs/showdown.js"></script>

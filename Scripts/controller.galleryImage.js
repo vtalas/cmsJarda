@@ -1,8 +1,9 @@
 /*global MaspartiData, ApiWrapper*/
 function galleryImageController($scope, $routeParams, test, $location) {
 
-	$scope.$on("getAlbumPhotosSuccess", function (e, data) {
+	$scope.$on("getAlbumPhotosSuccess", function (e, data, index) {
 		$scope.gallery = data;
+		getImage(index);
 	});
 
 	$scope.$on("global-keydown", function (e, $event) {
@@ -26,7 +27,6 @@ function galleryImageController($scope, $routeParams, test, $location) {
 		if (typeof index === "undefined"){
 			$scope.gallery = null;
 		}
-		handleUrlParams();
 	});
 
 	handleUrlParams();
@@ -44,15 +44,24 @@ function galleryImageController($scope, $routeParams, test, $location) {
 	}
 
 	function getImage(index) {
+		$scope.loading = true;
+
 		if (!$scope.gallery) {
 			test.getAlbumPhotos(getGalleryId()).then(function (data) {
+				console.log("..load from server ... ");
 				$scope.gallery = data;
 				$scope.image = $scope.gallery[index];
+				$scope.loading = false;
 			});
 			return;
 		}
+		setTimeout(function () {
+			console.log("--load image from cache---", index);
+			$scope.image = $scope.gallery[index];
+			$scope.loading = false;
 
-		$scope.image = $scope.gallery[index];
+			$scope.$apply();
+		}, 1000)
 	}
 
 	function handleUrlParams () {
@@ -77,7 +86,7 @@ function galleryImageController($scope, $routeParams, test, $location) {
 			imageIndex = 0;
 		}
 
-		$scope.image = $scope.gallery[imageIndex];
+		getImage(imageIndex);
 		$location.search("i", imageIndex);
 	};
 
@@ -89,7 +98,7 @@ function galleryImageController($scope, $routeParams, test, $location) {
 		if (imageIndex <= 0) {
 			imageIndex = length - 1;
 		}
-		$scope.image = $scope.gallery[imageIndex];
+		getImage(imageIndex);
 		$location.search("i", imageIndex);
 	};
 

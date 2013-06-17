@@ -56,7 +56,12 @@ module.controller("appController", function ($scope) {
 
 	$scope.globalKeydown = function (event) {
 		$scope.$broadcast("global-keydown", event);
-	}
+	};
+
+	$scope.$on("set-message", function(e, message) {
+		$scope.message = message;
+	});
+
 });
 
 

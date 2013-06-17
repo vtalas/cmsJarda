@@ -19,7 +19,7 @@ function gridelementGdataAlbumCtrl($scope, test, $routeParams, $location,$rootSc
 	$scope.showImage = function (galleryId, imageIndex ) {
 		$location.search("i", imageIndex);
 		$location.search("g", galleryId);
-		$rootScope.$broadcast("getAlbumPhotosSuccess", $scope.gdataAlbumPhotosAll);
+		$rootScope.$broadcast("getAlbumPhotosSuccess", $scope.gdataAlbumPhotosAll, imageIndex);
 	};
 
 }

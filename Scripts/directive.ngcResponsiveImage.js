@@ -4,7 +4,7 @@ var ngcResponsiveImage = function () {
 	};
 
 	var imageByWindowSize = function (windowWidth, galleryImage) {
-		var imageUrl = galleryImage.getLarge();
+		var imageUrl = galleryImage.FullSize.PhotoUri;
 
 		if (windowWidth >= 768 && windowWidth < 1200) {
 			imageUrl = galleryImage.getLarge();
@@ -53,6 +53,7 @@ var ngcResponsiveImage = function () {
 			url = imageByWindowSize(windowWidth, galleryImage);
 
 		getImage(url, scope).then(function (image) {
+			console.log(image);
 			scope.imageWidth = image.width;
 			renderImage(scope);
 			scope.source = url;
@@ -67,6 +68,7 @@ var ngcResponsiveImage = function () {
 		controller: function ($scope) {
 			$scope.containerWidth = "55";
 			$scope.windowWidth = $(window).width();
+
 			$scope.isFullSize = function () {
 				return $scope.imageWidth <= $scope.containerWidth;
 			};
@@ -96,10 +98,12 @@ var ngcResponsiveImage = function () {
 		restrict: "E",
 		templateUrl: "imageGalleryTemplate.html",
 		link: function (scope, iElement, iAttrs) {
+			console.log("xx");
 			scope.$watch("galleryImage", function (galleryImage, oldValue) {
 				if (galleryImage === undefined) {
 					return;
 				}
+				debugger;
 				refreshImage(scope, galleryImage)
 			});
 

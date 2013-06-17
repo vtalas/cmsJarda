@@ -1,14 +1,36 @@
 /*global MaspartiData, ApiWrapper*/
 function galleryImageController($scope, $routeParams, test, $location) {
 
-	$scope.$on("getAlbumPhotosSuccessx", function (e, data) {
-		console.log("galleryImageController")
+	$scope.$on("getAlbumPhotosSuccess", function (e, data) {
 		$scope.gallery = data;
+		console.log($routeParams.i)
+		console.log($location.search().i)
+
 	});
 
-	var getImageIndex = function () {
+	function getImageIndex () {
 		return $routeParams.i;
-	};
+	}
+
+	function handleUrlParams () {
+		var galleryId = $routeParams.g,
+			index = getImageIndex();
+
+		if (typeof index !== "undefined" && typeof galleryId !== "undefined"){
+			$scope.image = $scope.gallery[index];
+		}
+	}
+
+	$scope.$on("$locationChangeSuccess", function () {
+		var index = getImageIndex();
+		console.log("xxx", $routeParams.i)
+		if (typeof index === "undefined"){
+			$scope.gallery = null;
+		}
+		handleUrlParams();
+
+	});
+
 
 	$scope.imageUrl = function () {
 		var x = "";

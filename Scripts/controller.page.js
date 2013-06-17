@@ -12,11 +12,5 @@ function pageController($scope, cmsApi, $routeParams) {
 	    $scope.message = message;
 	});
 
-	$scope.$on("getAlbumPhotosSuccess", function(e, message) {
-		$scope.show = true;
-		$scope.$broadcast("getAlbumPhotosSuccessx", message);
-	});
-
-
 
 }

@@ -59,6 +59,12 @@ var ApiWrapper = (function () {
 
 		return deferred;
 	};
+
+	ApiWrapper.prototype.getImageFromAlbum = function (albumId, imageIndex) {
+		return this.getAlbumPhotos(albumId).then(function (data) {
+			return data[imageIndex];
+		})
+	};
 	ApiWrapper.prototype.getAlbums = function () {
 		var deferred = $.Deferred();
 

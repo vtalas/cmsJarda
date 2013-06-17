@@ -159,14 +159,9 @@
 
 		<div class="grid_9 xxx">
 				<div ng-repeat="photo in gdataAlbumPhotos" class="image-small">
-					<button ng-click="showImage(gdataAlbumId, $index)"><img ngc-lazy-image="photo.Thumbnails[0].PhotoUri"/></button>
+					<button ng-click="showImage(gdataAlbumId, $index + 1)"><img ngc-lazy-image="photo.Thumbnails[0].PhotoUri"/></button>
 				</div>
 		</div>
-
-		<!--{{templatesss}}-->
-		<!--<div ng-show="show">-->
-			<!--<div ng-include="templatesss"></div>-->
-		<!--</div>-->
 	</div>
 	<div class="clear"></div>
 </div>

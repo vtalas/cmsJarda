@@ -3,45 +3,68 @@ function galleryImageController($scope, $routeParams, test, $location) {
 
 	$scope.$on("getAlbumPhotosSuccess", function (e, data) {
 		$scope.gallery = data;
-		console.log($routeParams.i)
-		console.log($location.search().i)
-
 	});
+
+	$scope.$on("global-keydown", function (e, $event) {
+		if (!visible()) {
+			return;
+		}
+		var key = $event.keyCode;
+		switch (key){
+			case 27 : $scope.close();
+				break;
+			case 37 : $scope.prev();
+				break;
+			case 32 :
+			case 39 : $scope.next();
+				break;
+		}
+	});
+
+	$scope.$on("$locationChangeSuccess", function () {
+		var index = getImageIndex();
+		if (typeof index === "undefined"){
+			$scope.gallery = null;
+		}
+		handleUrlParams();
+	});
+
+	handleUrlParams();
+
+	function visible () {
+		return $scope.gallery !== null && $scope.gallery !== undefined;
+	}
 
 	function getImageIndex () {
 		return $routeParams.i;
 	}
 
+	function getGalleryId () {
+		return $routeParams.g;
+	}
+
+	function getImage(index) {
+		if (!$scope.gallery) {
+			test.getAlbumPhotos(getGalleryId()).then(function (data) {
+				$scope.gallery = data;
+				$scope.image = $scope.gallery[index];
+			});
+			return;
+		}
+
+		$scope.image = $scope.gallery[index];
+	}
+
 	function handleUrlParams () {
-		var galleryId = $routeParams.g,
+		var galleryId = getGalleryId(),
 			index = getImageIndex();
 
 		if (typeof index !== "undefined" && typeof galleryId !== "undefined"){
-			$scope.image = $scope.gallery[index];
+			getImage(index);
 		}
 	}
 
-	$scope.$on("$locationChangeSuccess", function () {
-		var index = getImageIndex();
-		console.log("xxx", $routeParams.i)
-		if (typeof index === "undefined"){
-			$scope.gallery = null;
-		}
-		handleUrlParams();
-
-	});
-
-
-	$scope.imageUrl = function () {
-		var x = "";
-		if ($scope.ready) {
-			x = $scope.image.fullsize.url;
-		}
-		return x;
-	};
-
 	$scope.close = function () {
-		console.log("xx")
 		location.hash = $location.path();
 	};
 
@@ -70,14 +93,6 @@ function galleryImageController($scope, $routeParams, test, $location) {
 		$location.search("i", imageIndex);
 	};
 
-	$scope.$on("global-keydown", function (e, $event) {
-		var key = $event.keyCode;
-
-		switch (key){
-			case 27 : $scope.close();
-				break;
-		}
-	});
 
 
 }

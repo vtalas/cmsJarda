@@ -7,10 +7,8 @@ function pageController($scope, cmsApi, $routeParams) {
 		$scope.page = data;
 	});
 
-
 	$scope.$on("set-message", function(e, message) {
 	    $scope.message = message;
 	});
-
 
 }

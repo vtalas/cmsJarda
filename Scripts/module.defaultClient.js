@@ -55,7 +55,6 @@ module.directive("ngcResponsiveImage", ngcResponsiveImage);
 module.controller("appController", function ($scope) {
 
 	$scope.globalKeydown = function (event) {
-		console.log("xxxXX", event)
 		$scope.$broadcast("global-keydown", event);
 	}
 });

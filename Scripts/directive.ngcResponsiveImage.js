@@ -2,19 +2,22 @@ var ngcResponsiveImage = function () {
 	var getWidth = function (scope) {
 		return scope.windowWidth;
 	};
+	var getWindowHeight = function (scope) {
+		return scope.windowHeight;
+	};
 
 	var imageByWindowSize = function (windowWidth, galleryImage) {
 		var imageUrl = galleryImage.FullSize.PhotoUri;
 
 		if (windowWidth >= 768 && windowWidth < 1200) {
-			imageUrl = galleryImage.getLarge();
+			imageUrl = galleryImage.Large.PhotoUri;
 		}
 		if (windowWidth >= 480 && windowWidth < 768) {
-			imageUrl = galleryImage.getLarge();
+			imageUrl = galleryImage.Medium.PhotoUri;
 		}
 
 		if (windowWidth < 480) {
-			imageUrl = galleryImage.getSmall();
+			imageUrl = galleryImage.Small.PhotoUri;
 		}
 
 		return imageUrl;
@@ -22,25 +25,36 @@ var ngcResponsiveImage = function () {
 
 	var getImage = function (url) {
 		var image = new Image(),
-			x;
+
+			promise;
 
 		image.src = url;
-		x = $.Deferred();
+		promise = $.Deferred();
+
 
 		$(image).load(function () {
-			x.resolve(this);
+			var loadimage = this;
+			setTimeout(function () {
+				promise.resolve(loadimage);
+			},1000)
 		});
 
-		return x.promise();
+		return promise.promise();
 	};
 
 	var renderImage = function (scope) {
-		var imageOverFlows = getWidth(scope) < scope.imageWidth;
+		var overflowWidth = getWidth(scope) < scope.imageWidth;
+		var overflowHeight = getWindowHeight(scope) < scope.imageWidth;
 
-		if (imageOverFlows) {
+		if (overflowWidth) {
 			scope.containerWidth = null;
 		} else {
 			scope.containerWidth = scope.imageWidth;
+		}
+
+		if (overflowHeight) {
+			var windowHeight = getWindowHeight(scope);
+			scope.containerWidth = Math.round(scope.imageWidth / scope.imageHeight * (windowHeight - 50 ));
 		}
 	};
 
@@ -51,12 +65,13 @@ var ngcResponsiveImage = function () {
 	var refreshImage = function (scope, galleryImage) {
 		var windowWidth = getWidth(scope),
 			url = imageByWindowSize(windowWidth, galleryImage);
-
-		getImage(url, scope).then(function (image) {
-			console.log(image);
+		scope.loading = true;
+		getImage(url, scope).done(function (image) {
 			scope.imageWidth = image.width;
+			scope.imageHeight = image.height;
 			renderImage(scope);
 			scope.source = url;
+			scope.loading = false;
 			scope.$apply();
 		});
 	};
@@ -68,6 +83,7 @@ var ngcResponsiveImage = function () {
 		controller: function ($scope) {
 			$scope.containerWidth = "55";
 			$scope.windowWidth = $(window).width();
+			$scope.windowHeight = $(window).height();
 
 			$scope.isFullSize = function () {
 				return $scope.imageWidth <= $scope.containerWidth;
@@ -84,31 +100,34 @@ var ngcResponsiveImage = function () {
 			};
 
 			$scope.showFullSize = function () {
-				if ($scope.isFullSize()) {
-					renderImage($scope);
-				}
-				else {
+				if (!$scope.isFullSize()) {
 					renderImageFullSize($scope);
 				}
+				else {
+					renderImage($scope);
+				}
 			};
-			$scope.getCssWidth = function (width) {
+			$scope.getCssWidth = function (width,a) {
+				//console.log($scope.galleryImage.Small.PhotoUri);
 				return width === null ? "auto" : width + "px";
+			};
+			$scope.getCssHeight = function (height) {
+				return height === null ? "auto" : height + "px";
 			};
 		},
 		restrict: "E",
 		templateUrl: "imageGalleryTemplate.html",
 		link: function (scope, iElement, iAttrs) {
-			console.log("xx");
 			scope.$watch("galleryImage", function (galleryImage, oldValue) {
 				if (galleryImage === undefined) {
 					return;
 				}
-				debugger;
 				refreshImage(scope, galleryImage)
 			});
 
 			scope.$on("windowChanged", function (x, data) {
 				scope.windowWidth = data.width;
+				scope.windowHeight = data.height;
 				refreshImage(scope, scope.galleryImage)
 			});
 

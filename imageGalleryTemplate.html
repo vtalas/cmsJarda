@@ -1,6 +1,9 @@
+<div style="border: 1px solid #009F00; margin: 0px auto;width:{{getCssWidth(containerWidth,this)}};position:relative" ngc-simple-drag>
 
-<div style="border: 1px solid #009F00; margin: 0px auto;width:{{getCssWidth(containerWidth)}}">
-	<button ng-click="showFullSize()" style="position: absolute" >{{containerWidth}}  ..{{isFullSize()}}./{{isFullSizeCssClass()}}</button>
+	<div  style="position: absolute;background-color: #fff">
+		<button ng-click="showFullSize()" >{{containerWidth}}  ..{{isFullSize()}}./{{isFullSizeCssClass()}}</button>
+		<div ng-show="loading">..loading..</div>
+	</div>
 
-	<img ngc-lazy-image="source" src="loader.jpg" width="100%"/>
+	<img ngc-lazy-image="source"  width="100%" height="100%" />
 </div>

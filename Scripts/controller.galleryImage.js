@@ -44,24 +44,19 @@ function galleryImageController($scope, $routeParams, test, $location) {
 	}
 
 	function getImage(index) {
-		$scope.loading = true;
-
 		if (!$scope.gallery) {
 			test.getAlbumPhotos(getGalleryId()).then(function (data) {
 				console.log("..load from server ... ");
 				$scope.gallery = data;
 				$scope.image = $scope.gallery[index];
-				$scope.loading = false;
 			});
 			return;
 		}
 		setTimeout(function () {
 			console.log("--load image from cache---", index);
 			$scope.image = $scope.gallery[index];
-			$scope.loading = false;
-
 			$scope.$apply();
-		}, 1000)
+		}, 10)
 	}
 
 	function handleUrlParams () {

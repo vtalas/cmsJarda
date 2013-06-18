@@ -51,6 +51,7 @@ module.directive("gridelement", function ($compile, $templateCache	) {
 
 module.directive("ngcGdataAlbum", ngcGdataAlbumDirective);
 module.directive("ngcLazyImage", ngcLazyImage);
+module.directive("ngcSimpleDrag", simpleDragDirective);
 module.directive("ngcResponsiveImage", ngcResponsiveImage);
 module.controller("appController", function ($scope) {
 

@@ -1,16 +1,34 @@
 function simpleDragDirective() {
 	return  {
 		link: function (scope, element, attr) {
-			element.bind("mousedown", function () {
-				console.log("kasjbdjkasb");
-			})
-			$(element).bind("drag", function (e) {
-		//			console.log(e.originalEvent.layerX, e.originalEvent.clientX, e.originalEvent.pageX, e.originalEvent.offsetX);
-				var off = e.originalEvent.offsetX;
-				var neleft = off + e.originalEvent.pageX;
-				console.log(neleft);
-				element.css("left", (neleft) )
-			})
+			var offsetX = 0;
+			var offsetY = 0;
+			element.bind({
+				dragstart: function (e) {
+					offsetX = e.originalEvent.offsetX;
+					offsetY = e.originalEvent.offsetY;
+				},
+				dragover: function (e) {
+					var event = e.originalEvent;
+					e.stopPropagation();
+					e.preventDefault();
+					var dt = e.originalEvent.dataTransfer;
+					dt.effectAllowed = dt.dropEffect = 'none';
+
+					if (event.pageX && event.pageY) {
+						var neleft = event.pageX - offsetX;
+						var newtop = event.pageY - offsetY;
+						element.css("left", neleft);
+						element.css("top", newtop);
+					}
+				},
+				dragenter: function (e) {
+					e.stopPropagation();
+					e.preventDefault();
+					var dt = e.originalEvent.dataTransfer;
+					dt.effectAllowed = dt.dropEffect = 'none';
+				},
+			});
 		}
 	}
-};
+}

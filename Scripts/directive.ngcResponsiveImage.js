@@ -36,7 +36,7 @@ var ngcResponsiveImage = function () {
 			var loadimage = this;
 			setTimeout(function () {
 				promise.resolve(loadimage);
-			},1000)
+			}, 1000)
 		});
 
 		return promise.promise();
@@ -90,10 +90,10 @@ var ngcResponsiveImage = function () {
 			};
 
 			$scope.isFullSizeCssClass = function () {
-				if ($scope.isFullSize() && $scope.windowWidth < $scope.imageWidth ){
+				if ($scope.isFullSize() && $scope.windowWidth < $scope.imageWidth) {
 					return "show low";
 				}
-				if (!$scope.isFullSize()){
+				if (!$scope.isFullSize()) {
 					return "show full";
 				}
 				return "hide";
@@ -107,7 +107,7 @@ var ngcResponsiveImage = function () {
 					renderImage($scope);
 				}
 			};
-			$scope.getCssWidth = function (width,a) {
+			$scope.getCssWidth = function (width, a) {
 				//console.log($scope.galleryImage.Small.PhotoUri);
 				return width === null ? "auto" : width + "px";
 			};
@@ -116,21 +116,37 @@ var ngcResponsiveImage = function () {
 			};
 		},
 		restrict: "E",
+		replace:true,
 		templateUrl: "imageGalleryTemplate.html",
-		link: function (scope, iElement, iAttrs) {
-			scope.$watch("galleryImage", function (galleryImage, oldValue) {
-				if (galleryImage === undefined) {
-					return;
-				}
-				refreshImage(scope, galleryImage)
-			});
+		compile: function (tElement) {
+			return function (scope, element, iAttrs) {
+				scope.$watch("galleryImage", function (galleryImage, oldValue) {
+					if (galleryImage === undefined) {
+						return;
+					}
+					refreshImage(scope, galleryImage);
 
-			scope.$on("windowChanged", function (x, data) {
-				scope.windowWidth = data.width;
-				scope.windowHeight = data.height;
-				refreshImage(scope, scope.galleryImage)
-			});
+					console.log(element.css("left"), element[0]);
+					element.css("left", 40 );
+					element.css("top", 40 );
+				});
 
+				scope.$watch("containerWidth", function (value, oldValue) {
+					var isShrinking = oldValue > value;
+					if (isShrinking ) {
+						element.css("left", 40);
+						element.css("top", 40 );
+					}
+					element.css("width", value);
+				});
+
+				scope.$on("windowChanged", function (x, data) {
+					scope.windowWidth = data.width;
+					scope.windowHeight = data.height;
+					refreshImage(scope, scope.galleryImage)
+				});
+			}
 		}
+
 	};
 };

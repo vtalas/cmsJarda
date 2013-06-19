@@ -144,14 +144,12 @@
 
 			<h3>{{gridelement.Resources.text.Value}}</h3>
 
-			<div class="first-image grid_3 xxx" class="">
+			<div class="first-image grid_3" class="">
 				<img ngc-lazy-image="firstPhoto.Thumbnails[1].PhotoUri"/>
 			</div>
-		<a href="#/page/{{route.link}}">reset</a>
-
-		<div class="grid_9 xxx">
+		<div class="grid_9">
 				<div ng-repeat="photo in gdataAlbumPhotos" class="image-small">
-					<button ng-click="showImage(gdataAlbumId, $index + 1)"><img ngc-lazy-image="photo.Thumbnails[0].PhotoUri"/></button>
+					<div ng-click="showImage(gdataAlbumId, $index + 1)" class="clickable"><img  ngc-lazy-image="photo.Thumbnails[0].PhotoUri"/></div>
 				</div>
 		</div>
 	</div>

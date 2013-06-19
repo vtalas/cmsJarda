@@ -25,7 +25,6 @@ var ngcResponsiveImage = function () {
 
 	var getImage = function (url) {
 		var image = new Image(),
-
 			promise;
 
 		image.src = url;
@@ -39,7 +38,7 @@ var ngcResponsiveImage = function () {
 			}, 1000)
 		});
 
-		return promise.promise();
+		return promise;
 	};
 
 	var renderImage = function (scope) {
@@ -66,12 +65,13 @@ var ngcResponsiveImage = function () {
 		var windowWidth = getWidth(scope),
 			url = imageByWindowSize(windowWidth, galleryImage);
 		scope.loading = true;
-		getImage(url, scope).done(function (image) {
+		scope.imagePromise = getImage(url).done(function (image) {
 			scope.imageWidth = image.width;
 			scope.imageHeight = image.height;
 			renderImage(scope);
 			scope.source = url;
 			scope.loading = false;
+			scope.skipping = false;
 			scope.$apply();
 		});
 	};
@@ -81,7 +81,7 @@ var ngcResponsiveImage = function () {
 			galleryImage: "="
 		},
 		controller: function ($scope) {
-			$scope.containerWidth = "55";
+			$scope.containerWidth = "16";
 			$scope.windowWidth = $(window).width();
 			$scope.windowHeight = $(window).height();
 
@@ -91,12 +91,12 @@ var ngcResponsiveImage = function () {
 
 			$scope.isFullSizeCssClass = function () {
 				if ($scope.isFullSize() && $scope.windowWidth < $scope.imageWidth) {
-					return "show low";
+					return "icon-chevron-up";
 				}
 				if (!$scope.isFullSize()) {
-					return "show full";
+					return "icon-resize-full";
 				}
-				return "hide";
+				return "icon-resize-small";
 			};
 
 			$scope.showFullSize = function () {
@@ -121,12 +121,17 @@ var ngcResponsiveImage = function () {
 		compile: function (tElement) {
 			return function (scope, element, iAttrs) {
 				scope.$watch("galleryImage", function (galleryImage, oldValue) {
+					scope.source = null;
 					if (galleryImage === undefined) {
 						return;
 					}
+					if (scope.imagePromise) {
+						if (scope.imagePromise.state() === "pending"){
+							scope.imagePromise.reject();
+							scope.skipping = true;
+						}
+					}
 					refreshImage(scope, galleryImage);
-
-					console.log(element.css("left"), element[0]);
 					element.css("left", 40 );
 					element.css("top", 40 );
 				});

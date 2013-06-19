@@ -1,20 +1,36 @@
-
-<div class="draggable" ngc-simple-drag stylxxe="
-	width:{{getCssWidth(containerWidth,this)}};
-	position:absolute;
-	"
-
-	>
+<div ngc-simple-drag class="draggable">
 	<style>
 		.draggable {
 			position: absolute;
-			border: 1px solid #009F00;
+		}
+
+		.actions {
+			position: absolute;
+		}
+
+		.responsive-image-container {
+			position: absolute;
+			background-color: #fff;
+			top: 50px;
+			left: 700px;
+			width: 300px;
 		}
 	</style>
-
-	<div style="position: absolute;background-color: #fff">
-		<button ng-click="showFullSize()" >{{containerWidth}}  ..{{isFullSize()}}./{{isFullSizeCssClass()}}</button>
-		<div ng-show="loading">..loading..</div>
+	<div style="border: 1px solid #009F00;">
+		<div class="actions">
+			<button ng-click="showFullSize()" class="btn-link"><span class="icon-white" ng-class="isFullSizeCssClass()">&nbsp;</span>
+			</button>
+		</div>
 	</div>
-	<img ngc-lazy-image="source"  width="100%" height="100%" />
+	<img ngc-lazy-image="source" width="100%" height="100%"/>
+	<div class="responsive-image-container">
+		<div>
+			<span ng-show="loading">..loading..</span>
+			<span ng-show="skipping">...skipping images...</span>
+		</div>
+		<div>{{containerWidth}} ..{{isFullSize()}}./.{{isFullSizeCssClass()}}</div>
+	</div>
+
 </div>
+
+

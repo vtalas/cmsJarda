@@ -1,4 +1,4 @@
-var module = angular.module("defaultClient", ["apiModule", "ui.keypress", "ui.event"]);
+var module = angular.module("defaultClient", ["apiModule", "ui.keypress", "ui.event", "ui.bootstrap"]);
 
 module.factory('cache', ['$cacheFactory', function ($cacheFactory) {
 	return $cacheFactory("jarda");

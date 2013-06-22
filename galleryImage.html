@@ -37,11 +37,11 @@
 	</div>
 	<div class="vertical-offset"  >
 		<div>
-			<button ng-click="prev()">prev</button>
-			<button ng-click="next()">next</button>
-			<button ng-click="close()" >close</button>
+			<button ng-click="prev()" class="btn btn-link" tooltip="předchozí (kurzor doleva)" tooltip-placement="right"><b class="icon icon-chevron-left icon-white">&nbsp</b></button>
+			<button ng-click="next()" class="btn btn-link" tooltip="další (kurzor doprava)" tooltip-placement="right"><b class="icon icon-chevron-right icon-white">&nbsp</b></button>
+			<button ng-click="close()" class="btn btn-link" tooltip="zavřít (Esc)" tooltip-placement="bottom"><b class="icon icon-remove icon-white">&nbsp</b></button>
+			<ngc-responsive-image gallery-image="image" />
 		</div>
-		<ngc-responsive-image gallery-image="image" />
 	</div>
 </div>
 

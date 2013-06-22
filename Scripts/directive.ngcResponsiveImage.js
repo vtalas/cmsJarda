@@ -35,7 +35,7 @@ var ngcResponsiveImage = function () {
 			var loadimage = this;
 			setTimeout(function () {
 				promise.resolve(loadimage);
-			}, 1000)
+			}, 10)
 		});
 
 		return promise;
@@ -90,9 +90,6 @@ var ngcResponsiveImage = function () {
 			};
 
 			$scope.isFullSizeCssClass = function () {
-				if ($scope.isFullSize() && $scope.windowWidth < $scope.imageWidth) {
-					return "icon-chevron-up";
-				}
 				if (!$scope.isFullSize()) {
 					return "icon-resize-full";
 				}
@@ -107,8 +104,16 @@ var ngcResponsiveImage = function () {
 					renderImage($scope);
 				}
 			};
+
+			$scope.fullSizeTooltip = function () {
+				return $scope.isFullSize() ? "Přizpůsobit na stránku" : "Zobrazit původní velikost";
+			};
+
+			$scope.isOverFlowable = function () {
+				return $scope.windowHeight < $scope.imageHeight || $scope.windowWidth < $scope.imageWidth;
+			};
+
 			$scope.getCssWidth = function (width, a) {
-				//console.log($scope.galleryImage.Small.PhotoUri);
 				return width === null ? "auto" : width + "px";
 			};
 			$scope.getCssHeight = function (height) {
@@ -120,8 +125,8 @@ var ngcResponsiveImage = function () {
 		templateUrl: "imageGalleryTemplate.html",
 		compile: function (tElement) {
 			return function (scope, element, iAttrs) {
+				scope.source = null;
 				scope.$watch("galleryImage", function (galleryImage, oldValue) {
-					scope.source = null;
 					if (galleryImage === undefined) {
 						return;
 					}

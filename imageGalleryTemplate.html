@@ -16,13 +16,6 @@
 			width: 300px;
 		}
 	</style>
-	<div>
-		<div class="actions" ng-show="!loading">
-			<button ng-click="showFullSize()" class="btn-link"><span class="icon-white" ng-class="isFullSizeCssClass()">&nbsp;</span>
-			</button>
-		</div>
-	</div>
-	<img ngc-lazy-image="source" width="100%" height="100%"/>
 	<div class="responsive-image-container">
 		<div>
 			<span ng-show="loading">..loading..</span>
@@ -30,6 +23,15 @@
 		</div>
 		<div>{{containerWidth}} ..{{isFullSize()}}./.{{isFullSizeCssClass()}}</div>
 	</div>
+	<div>
+		<div class="actions">
+			<button ng-show="isOverFlowable()" ng-click="showFullSize()" class="btn-link"><span class="icon-white" ng-class="isFullSizeCssClass()"
+					tooltip="{{fullSizeTooltip()}}" tooltip-popup-delay="300" tooltip-placement="right"
+					>&nbsp;</span>
+			</button>
+		</div>
+	</div>
+	<img ngc-lazy-image="source" width="100%" height="100%"/>
 
 </div>
 

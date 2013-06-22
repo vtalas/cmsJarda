@@ -11,59 +11,58 @@ function galleryImageController($scope, $routeParams, test, $location) {
 			return;
 		}
 		var key = $event.keyCode;
-		switch (key){
-			case 27 : $scope.close();
+		switch (key) {
+			case 27 :
+				$scope.close();
 				break;
-			case 37 : $scope.prev();
+			case 37 :
+				$scope.prev();
 				break;
 			case 32 :
-			case 39 : $scope.next();
+			case 39 :
+				$scope.next();
 				break;
 		}
 	});
 
 	$scope.$on("$locationChangeSuccess", function () {
 		var index = getImageIndex();
-		if (typeof index === "undefined"){
+		if (typeof index === "undefined") {
 			$scope.gallery = null;
 		}
 	});
 
 	handleUrlParams();
 
-	function visible () {
+	function visible() {
 		return $scope.gallery !== null && $scope.gallery !== undefined;
 	}
 
-	function getImageIndex () {
+	function getImageIndex() {
 		return $routeParams.i;
 	}
 
-	function getGalleryId () {
+	function getGalleryId() {
 		return $routeParams.g;
 	}
 
 	function getImage(index) {
 		if (!$scope.gallery) {
 			test.getAlbumPhotos(getGalleryId()).then(function (data) {
-				console.log("..load from server ... ");
 				$scope.gallery = data;
 				$scope.image = $scope.gallery[index];
 			});
 			return;
 		}
-		setTimeout(function () {
-			console.log("--load image from cache---", index);
-			$scope.image = $scope.gallery[index];
-			$scope.$apply();
-		}, 10)
+		$scope.image = $scope.gallery[index];
+		$scope.$apply();
 	}
 
-	function handleUrlParams () {
+	function handleUrlParams() {
 		var galleryId = getGalleryId(),
 			index = getImageIndex();
 
-		if (typeof index !== "undefined" && typeof galleryId !== "undefined"){
+		if (typeof index !== "undefined" && typeof galleryId !== "undefined") {
 			getImage(index);
 		}
 	}
@@ -96,7 +95,6 @@ function galleryImageController($scope, $routeParams, test, $location) {
 		getImage(imageIndex);
 		$location.search("i", imageIndex);
 	};
-
 
 
 }

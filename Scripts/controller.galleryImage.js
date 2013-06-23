@@ -55,7 +55,6 @@ function galleryImageController($scope, $routeParams, test, $location) {
 			return;
 		}
 		$scope.image = $scope.gallery[index];
-		$scope.$apply();
 	}
 
 	function handleUrlParams() {

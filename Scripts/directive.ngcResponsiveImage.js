@@ -61,22 +61,35 @@ var ngcResponsiveImage = function () {
 		scope.containerWidth = scope.imageWidth;
 	};
 
-	var refreshImage = function (scope, galleryImage ,element) {
+	var refreshImage = function (scope, galleryImage, element) {
 		var windowWidth = getWidth(scope),
+			timeout,
 			url = imageByWindowSize(windowWidth, galleryImage);
+
 		scope.loading = true;
+		timeout = setTimeout(function () {
+			scope.showLoader = scope.loading;
+			scope.$emit("ngc-responsive-image-loading", scope.loading);
+			scope.$digest();
+		}, 200);
+
 		scope.imagePromise = getImage(url).done(function (image) {
 			scope.imageWidth = image.width;
 			scope.imageHeight = image.height;
 			renderImage(scope);
 			scope.source = url;
 			scope.loading = false;
+			scope.showLoader = false;
+			clearTimeout(timeout);
+			scope.$emit("ngc-responsive-image-loading", false);
+			scope.$emit("ngc-responsive-image-skipping", false);
 			scope.skipping = false;
 			resetPosition(element);
 			scope.$apply();
+
 		});
 	};
-	
+
 	var resetPosition = function (element) {
 		element.css("position", "relative");
 		element.css("margin", "0 auto");
@@ -113,6 +126,10 @@ var ngcResponsiveImage = function () {
 				}
 			};
 
+			$scope.isMovable = function () {
+				return $scope.isOverFlowable() && $scope.isFullSize() ? "movable" : "";
+			};
+
 			$scope.fullSizeTooltip = function () {
 				return $scope.isFullSize() ? "Přizpůsobit na stránku" : "Zobrazit původní velikost";
 			};
@@ -129,10 +146,10 @@ var ngcResponsiveImage = function () {
 			};
 		},
 		restrict: "E",
-		replace:true,
-		templateUrl: "imageGalleryTemplate.html",
-		compile: function (tElement) {
-			return function (scope, el, iAttrs) {
+		replace: true,
+		templateUrl: "template.ngcResponsiveImage.html",
+		compile: function () {
+			return function (scope, el) {
 				var element = el.find(".draggable");
 
 				scope.source = null;
@@ -141,9 +158,10 @@ var ngcResponsiveImage = function () {
 						return;
 					}
 					if (scope.imagePromise) {
-						if (scope.imagePromise.state() === "pending"){
+						if (scope.imagePromise.state() === "pending") {
 							scope.imagePromise.reject();
 							scope.skipping = true;
+							scope.$emit("ngc-responsive-image-skipping", true);
 						}
 					}
 					refreshImage(scope, galleryImage, element);
@@ -153,7 +171,7 @@ var ngcResponsiveImage = function () {
 					var isShrinking = oldValue > value;
 					element.css("width", value);
 
-					if (isShrinking ) {
+					if (isShrinking) {
 						resetPosition(element);
 					}
 				});

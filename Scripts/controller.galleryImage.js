@@ -1,5 +1,5 @@
 /*global MaspartiData, ApiWrapper*/
-function galleryImageController($scope, $routeParams, test, $location) {
+function galleryImageViewerController($scope, $routeParams, test, $location) {
 
 	$scope.$on("getAlbumPhotosSuccess", function (e, data, index) {
 		$scope.gallery = data;
@@ -32,6 +32,20 @@ function galleryImageController($scope, $routeParams, test, $location) {
 		}
 	});
 
+	$scope.$on("ngc-responsive-image-loading", function (e, data) {
+		$scope.loading = data;
+		if ($scope.$$phase !== "$digest"){
+			$scope.$digest();
+		}
+	});
+	$scope.$on("ngc-responsive-image-skipping", function (e, data) {
+		$scope.skipping = data;
+		if ($scope.$$phase !== "$digest"){
+			$scope.$digest();
+		}
+	});
+
+
 	handleUrlParams();
 
 	function visible() {
@@ -47,7 +61,9 @@ function galleryImageController($scope, $routeParams, test, $location) {
 	}
 
 	function getImage(index) {
+
 		if (!$scope.gallery) {
+			$scope.newindex = index;
 			test.getAlbumPhotos(getGalleryId()).then(function (data) {
 				$scope.gallery = data;
 				$scope.image = $scope.gallery[index];

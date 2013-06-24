@@ -1,38 +1,50 @@
-<div ngc-simple-drag class="draggable">
-	<style>
-		.draggable {
-			position: absolute;
-		}
+<div>
+	<div style="width:100%; position: absolute">
+		<div class="responsive-image-info-panel">
+			<div>
+				<div>
+					<span ng-show="loading" style="height: 10px;"><img src="horizontalloadersmall.gif"> loading ... </span>
+					&nbsp;
+				</div>
+				<span ng-show="skipping">...skipping images...</span>
+			</div>
+			<div>{{containerWidth}} ..{{isFullSize()}}./.{{isFullSizeCssClass()}}</div>
+		</div>
+	</div>
 
-		.actions {
-			position: absolute;
-		}
 
-		.responsive-image-container {
-			position: absolute;
-			background-color: #fff;
-			top: 50px;
-			left: 700px;
-			width: 300px;
-		}
-	</style>
-	<div class="responsive-image-container">
+	<div ngc-simple-drag class="draggable">
+		<style>
+			.draggable {
+			}
+
+			.actions {
+				position: absolute;
+			}
+
+			.responsive-image-info-panel {
+				background-color: #fff;
+				position: relative;
+				z-index: 1000;;
+				float: right;
+				width: 300px;
+			}
+		</style>
 		<div>
-			<span ng-show="loading">..loading..</span>
-			<span ng-show="skipping">...skipping images...</span>
+			<div class="actions">
+				<button ng-show="isOverFlowable()" ng-click="showFullSize()" class="btn-link"><span class="icon-white"
+																									ng-class="isFullSizeCssClass()"
+																									tooltip="{{fullSizeTooltip()}}"
+																									tooltip-popup-delay="300"
+																									tooltip-placement="right"
+						>&nbsp;</span>
+				</button>
+			</div>
 		</div>
-		<div>{{containerWidth}} ..{{isFullSize()}}./.{{isFullSizeCssClass()}}</div>
+		<img ngc-lazy-image="source" width="100%" height="100%"/>
+
 	</div>
-	<div>
-		<div class="actions">
-			<button ng-show="isOverFlowable()" ng-click="showFullSize()" class="btn-link"><span class="icon-white" ng-class="isFullSizeCssClass()"
-					tooltip="{{fullSizeTooltip()}}" tooltip-popup-delay="300" tooltip-placement="right"
-					>&nbsp;</span>
-			</button>
-		</div>
-	</div>
-	<img ngc-lazy-image="source" width="100%" height="100%"/>
+
 
 </div>
-
 

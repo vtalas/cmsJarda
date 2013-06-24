@@ -11,8 +11,6 @@ module.factory("test", ['cmsApi' ,'cache', function (cmsApi, cache) {
 module.config(['$routeProvider', '$provide', function ($routeProvider) {
 	$routeProvider
 		.when('/page/:link', {reloadOnSearch: false, controller: pageController, templateUrl: 'template.page.html', resolve: {api: "test"}})
-		//.when('/page/:link/:galleryId/:imageIndex', {reloadOnSearch: false, controller: galleryImageController, templateUrl: 'galleryImage.html', resolve: {api: "test"}})
-		//.when('/page/:link/:galleryId/:imageIndex', {controller: pageController, templateUrl: 'template.page.html', resolve: {api: "test"}})
 		.when('/home', {controller: homeController, templateUrl: 'template.home.html'})
 		.when('/login', {controller: loginController, templateUrl: 'template.login.html'})
 		.otherwise({redirectTo: '/home'});

@@ -61,7 +61,7 @@ var ngcResponsiveImage = function () {
 		scope.containerWidth = scope.imageWidth;
 	};
 
-	var refreshImage = function (scope, galleryImage) {
+	var refreshImage = function (scope, galleryImage ,element) {
 		var windowWidth = getWidth(scope),
 			url = imageByWindowSize(windowWidth, galleryImage);
 		scope.loading = true;
@@ -72,8 +72,16 @@ var ngcResponsiveImage = function () {
 			scope.source = url;
 			scope.loading = false;
 			scope.skipping = false;
+			resetPosition(element);
 			scope.$apply();
 		});
+	};
+	
+	var resetPosition = function (element) {
+		element.css("position", "relative");
+		element.css("margin", "0 auto");
+		element.css("left", "auto");
+		element.css("top", "auto");
 	};
 
 	return {
@@ -124,7 +132,9 @@ var ngcResponsiveImage = function () {
 		replace:true,
 		templateUrl: "imageGalleryTemplate.html",
 		compile: function (tElement) {
-			return function (scope, element, iAttrs) {
+			return function (scope, el, iAttrs) {
+				var element = el.find(".draggable");
+
 				scope.source = null;
 				scope.$watch("galleryImage", function (galleryImage, oldValue) {
 					if (galleryImage === undefined) {
@@ -136,18 +146,16 @@ var ngcResponsiveImage = function () {
 							scope.skipping = true;
 						}
 					}
-					refreshImage(scope, galleryImage);
-					element.css("left", 40 );
-					element.css("top", 40 );
+					refreshImage(scope, galleryImage, element);
 				});
 
 				scope.$watch("containerWidth", function (value, oldValue) {
 					var isShrinking = oldValue > value;
-					if (isShrinking ) {
-						element.css("left", 40);
-						element.css("top", 40 );
-					}
 					element.css("width", value);
+
+					if (isShrinking ) {
+						resetPosition(element);
+					}
 				});
 
 				scope.$on("windowChanged", function (x, data) {

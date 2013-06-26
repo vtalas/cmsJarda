@@ -1,5 +1,4 @@
 <div ng-repeat="gridelement in page.GridElements">
-
 	<div gridelement="gridelement"></div>
 	<hr />
 </div>
@@ -149,7 +148,7 @@
 			</div>
 		<div class="grid_9">
 				<div ng-repeat="photo in gdataAlbumPhotos" class="image-small">
-					<div ng-click="showImage(gdataAlbumId, $index + 1)" class="btn-link"><img  ngc-lazy-image="photo.Thumbnails[0].PhotoUri"/></div>
+					<div ng-click="showImage(gdataAlbumId, $index + 1)" class="btn-link"><img  ngc-lazy-image="photo.Thumbnails[1].PhotoUri"/></div>
 				</div>
 		</div>
 	</div>

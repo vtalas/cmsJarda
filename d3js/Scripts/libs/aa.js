@@ -7,15 +7,16 @@ var Animator = (function () {
 			.attr("height", 1000);
 
 		var self = this;
-		this.r = 150;
+		this.r = 350;
 		this.x = 100;
 		this.y = 100;
 
 		var circle = this.svg.append("circle");
+	this.mainCircle = circle;
 
 		var rect = this.svg.append("rect")
-			.style("stroke", "red")
-			.style("fill", "red")
+			.style("stroke", "#eee")
+			.style("fill", "#eee")
 			.on("click", function () {
 				console.log(self.timer);
 			})
@@ -26,7 +27,6 @@ var Animator = (function () {
 
 		this.startState(circle);
 
-		var chuj = false;
 		circle
 			.on("mouseenter", function () {
 				clearTimeout(self.timer);
@@ -38,11 +38,11 @@ var Animator = (function () {
 			})
 			.on("mouseout", function () {
 				console.log("mouseout");
-				self.setTimer(circle);
+				self.setTimer();
 			});
 	}
 
-	Animator.prototype.setTimer = function (circle) {
+	Animator.prototype.setTimer = function () {
 		var self = this;
 
 		if (this.timer > 0){
@@ -52,18 +52,26 @@ var Animator = (function () {
 
 		this.timer = setTimeout(function () {
 			console.log("----------", self.timer);
-			self.svg.selectAll(".xxx").style("display", "none");
-			self.startState(circle);
+			self.svg.selectAll(".xxx")
+				.style("display", "none")
+				.attr("r", 10);
+			;
+			self.startState(self.mainCircle);
 			self.timer = -1;
-		}, 500);
+		}, 1500);
 
 	};
 	Animator.prototype.startState = function (circle) {
 		circle.style("stroke", "gray")
+			.style("display", "block")
 			.style("fill", "green")
-			.attr("r", this.r)
+			.attr("r", this.r/3)
 			.attr("cx", this.x + this.r)
-			.attr("cy", this.y + this.r);
+			.attr("cy", this.y + this.r)
+			.transition()
+			.duration(400)
+			.attr("r", this.r)
+		;
 		return circle;
 	};
 
@@ -72,70 +80,49 @@ var Animator = (function () {
 	};
 	Animator.prototype.animate1 = function (elem) {
 		var rpul = this.r / 2;
-		var self = this;
-		elem
-			.style("fill", "blue")
-			.attr("r", this.r / 2)
-			.attr("cx", this.x + 3 * rpul)
-			.attr("cy", this.y + rpul);
+		elem.style("display", "none");
+//		elem
+//			.style("fill", "blue")
+//			.attr("r", this.r / 2)
+//			.attr("cx", this.x + 3 * rpul)
+//			.attr("cy", this.y + rpul);
 
 		var x = d3.selectAll(".xxx");
 		if (x[0].length > 0) {
-			x.style("display", "block");
+			x.style("display", "block")
+
 			return;
 		}
 
-		this.svg.insert("circle", "rect")
-			.style("fill", "green")
-			.on("mouseover", function () {
-				clearTimeout(self.timer);
-			})
-			.on("mouseout", function () {
-				self.setTimer(elem);
-			})
-			.attr("class", "xxx")
-			.attr("r", this.r / 2)
-			.attr("cx", this.x + rpul)
-			.attr("cy", this.y + rpul);
+		this.smallCircle(this.x + rpul, this.y + rpul, "red");
+		//this.smallCircle(this.x + rpul, this.y + 3 * rpul, "green");
+		this.smallCircle(this.x + 3 * rpul, this.y + 3 * rpul, "pink");
+		this.smallCircle(this.x + 3 * rpul, this.y + rpul, "pink");
+	};
 
-		this.svg.insert("circle", "rect")
-			.style("fill", "red")
-			.on("mouseover", function () {
-				clearTimeout(self.timer);
-			})
-			.on("mouseout", function () {
-				self.setTimer(elem);
-			})
-			.attr("class", "xxx")
-			.attr("r", this.r / 2)
-			.attr("cx", this.x + rpul)
-			.attr("cy", this.y + 3 * rpul);
-
+	Animator.prototype.smallCircle = function (cx, cy, color) {
+		var self = this;
 		this.svg.append("a")
 			.attr("xlink:href", function (d) {
 				return "http://somelink.com/link.php?id=" + d
 			})
 			.append("circle")
-			.style("fill", "yellow")
+			.style("fill", color)
 			.on("mouseover", function () {
 				clearTimeout(self.timer);
 			})
 			.on("mouseout", function () {
-				self.setTimer(elem);
+				self.setTimer();
 			})
 			.attr("class", "xxx")
-			.style("opacity", 0.5)
-			.attr("r", this.r / 2)
-			.attr("cx", this.x + 3 * rpul)
-			.attr("cy", this.y + 3 * rpul);
-	};
-	Animator.prototype.animate2 = function (elem) {
-		elem.transition()
+			.attr("r", this.r / 4)
+			.attr("cx", this.x + this.r)
+			.attr("cy", this.y + this.r)
+			.transition()
 			.duration(200)
-			.style("fill", "white")
-			.attr("r", 40)
-			.attr("cx", 50)
-			.attr("cy", 50)
+			.attr("r", this.r/2)
+			.attr("cx", cx)
+			.attr("cy", cy)
 	};
 
 	return Animator;

@@ -1,9 +1,7 @@
-function pageController($scope, cmsApi, $routeParams) {
-	var api = new ApiWrapper(cmsApi);
-
+function pageController($scope, test, $routeParams) {
 	$scope.link = $routeParams.link;
 
-	api.getPage($scope.link).then(function (data) {
+	test.getPage($scope.link).then(function (data) {
 		$scope.page = data;
 	});
 }
